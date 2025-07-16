@@ -1,0 +1,21 @@
+# Ignore artifacts:
+node_modules
+
+dist
+build
+coverage
+
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+*.min.js
+
+*.log
+*.tmp
+
+.vite
+.cache
+
+.vscode
+.idea
