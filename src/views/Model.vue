@@ -1,4 +1,3 @@
-<!-- src/views/dashboard/Model.vue -->
 <template>
   <div>
     <h2>模型管理</h2>

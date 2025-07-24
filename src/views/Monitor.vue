@@ -1,4 +1,3 @@
-<!-- src/views/dashboard/Monitor.vue -->
 <template>
   <div>
     <h2>系统监测</h2>

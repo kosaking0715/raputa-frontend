@@ -1,4 +1,3 @@
-<!-- src/views/dashboard/Patient.vue -->
 <template>
   <div>
     <h2>患者管理</h2>
