@@ -11,9 +11,9 @@ const routes = [
     component: DashboardLayout,
     children: [
       {
-        path: 'home',
-        name: 'DashboardHome',
-        component: () => import('@/views/Home.vue'),
+        path: 'patient',
+        name: 'DashboardPatient',
+        component: () => import('@/views/Patient.vue'),
       },
       {
         path: 'model',
@@ -21,9 +21,9 @@ const routes = [
         component: () => import('@/views/Model.vue'),
       },
       {
-        path: 'patient',
-        name: 'DashboardPatient',
-        component: () => import('@/views/Patient.vue'),
+        path: 'monitor',
+        name: 'DashboardMonitor',
+        component: () => import('@/views/Monitor.vue'),
       },
       {
         path: 'data',
@@ -31,11 +31,16 @@ const routes = [
         component: () => import('@/views/Data.vue'),
       },
       {
-        path: 'monitor',
-        name: 'DashboardMonitor',
-        component: () => import('@/views/Monitor.vue'),
+        path: 'system',
+        name: 'DashboardSystem',
+        component: () => import('@/views/System.vue'),
       },
-      { path: '', redirect: 'home' },
+      {
+        path: 'stats',
+        name: 'DashboardStats',
+        component: () => import('@/views/Stats.vue'),
+      },
+      { path: '', redirect: 'patient' },
     ],
   },
   { path: '/', redirect: '/login' },

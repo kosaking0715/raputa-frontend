@@ -36,7 +36,7 @@
                       class="dropdown-avatar"
                     />
                     <div class="user-details">
-                      <div class="user-name">{{ mockUser.name }}</div>
+                      <!-- <div class="user-name">{{ mockUser.name }}</div> -->
                       <div class="user-dept">{{ mockUser.hospital }}</div>
                       <div class="user-dept">{{ mockUser.department }}</div>
                     </div>
@@ -50,7 +50,10 @@
               </el-card>
             </template>
           </el-dropdown>
-          <el-button type="danger" @click="logout">登出</el-button>
+          <el-button type="danger" class="export-btn" dark @click="logout">
+            <el-icon style="margin-right: 4px"><SwitchButton /></el-icon>
+            登出
+          </el-button>
         </div>
       </el-header>
 
@@ -58,40 +61,45 @@
         <!-- 侧栏 -->
         <el-aside :class="['sidebar', isCollapsed ? 'collapsed' : '']">
           <el-menu
+            v-model="activeMenu"
             :default-active="activeMenu"
             :collapse="isCollapsed"
             :collapse-transition="false"
-            router
             unique-opened
+            @select="onMenuSelect"
           >
-            <el-menu-item index="/dashboard/home">
-              <el-icon><House /></el-icon>
-              <template #title>首页</template>
+            <el-menu-item index="/dashboard/patient">
+              <el-icon><User /></el-icon>
+              <template #title>患者管理</template>
             </el-menu-item>
             <el-menu-item index="/dashboard/model">
               <el-icon><DataLine /></el-icon>
               <template #title>模型管理</template>
             </el-menu-item>
-            <el-menu-item index="/dashboard/patient">
-              <el-icon><User /></el-icon>
-              <template #title>患者管理</template>
+            <el-menu-item index="/dashboard/monitor">
+              <el-icon><Loading /></el-icon>
+              <template #title>系统监测</template>
             </el-menu-item>
             <el-menu-item index="/dashboard/data">
               <el-icon><Document /></el-icon>
               <template #title>数据管理</template>
             </el-menu-item>
-            <el-menu-item index="/dashboard/monitor">
-              <el-icon><Loading /></el-icon>
-              <template #title>系统监测</template>
+            <el-menu-item index="/dashboard/stats">
+              <el-icon><Histogram /></el-icon>
+              <template #title>数据统计</template>
             </el-menu-item>
-            <el-menu-item @click="toggleCollapse">
+            <el-menu-item index="/dashboard/system">
+              <el-icon><Setting /></el-icon>
+              <template #title>系统管理</template>
+            </el-menu-item>
+            <div class="el-menu-item toggle-item" @click="toggleCollapse">
               <el-icon>
                 <component :is="isCollapsed ? Expand : Fold" />
               </el-icon>
-              <template #title>{{
+              <span v-if="!isCollapsed">{{
                 isCollapsed ? '展开菜单' : '收起菜单'
-              }}</template>
-            </el-menu-item>
+              }}</span>
+            </div>
           </el-menu>
         </el-aside>
 
@@ -107,17 +115,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { mockUser } from '@/mock/User'
+import { mockUser } from '@/mock/UserData'
 import {
   Fold,
   Expand,
-  House,
   DataLine,
   User,
   Document,
   Loading,
+  Setting,
+  Histogram,
+  SwitchButton,
 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
@@ -136,8 +146,11 @@ watch(
   },
 )
 
+onMounted(() => {
+  activeMenu.value = route.path
+})
+
 function logout() {
-  // TODO: 清除 token
   ElMessage.success({ message: '已登出，正在跳转到登录页', duration: 1500 })
   setTimeout(() => {
     router.push('/login')
@@ -146,6 +159,15 @@ function logout() {
 
 function toggleCollapse() {
   isCollapsed.value = !isCollapsed.value
+}
+
+function onMenuSelect(index: string) {
+  if (index === 'toggleCollapse') {
+    toggleCollapse()
+    activeMenu.value = route.path
+  } else if (index !== route.path) {
+    router.push(index)
+  }
 }
 </script>
 
@@ -282,6 +304,23 @@ body {
   border-bottom-right-radius: 20px;
   box-shadow: 2px 0 8px rgba(59, 130, 246, 0.15);
 }
+.toggle-item {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 48px;
+  line-height: 48px;
+  cursor: pointer;
+  color: #d1d5db;
+  transition: background-color 0.2s;
+}
+.toggle-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+.el-menu--collapse .toggle-item {
+  justify-content: center;
+}
 
 /* 主内容区 */
 .el-main {
@@ -368,6 +407,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.export-btn {
+  flex: 0 0 auto;
 }
 
 @media (min-resolution: 5dppx) {

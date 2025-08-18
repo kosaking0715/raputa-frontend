@@ -48,7 +48,7 @@ const onSubmit = () => {
     duration: 1500,
   })
   setTimeout(() => {
-    router.push('/dashboard/home')
+    router.push('/dashboard/patient')
   }, 1500)
 }
 </script>
